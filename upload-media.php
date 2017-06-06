@@ -1,6 +1,6 @@
 <?php include('config/config.php');
 // Check if there are any file in the upload input.
-if (isset($_FILES['upload'])) {
+if (!empty($_FILES['upload']['name'])) {
     // Temporary file.
     $tmpName = $_FILES['upload']['tmp_name'];
 
@@ -14,7 +14,7 @@ if (isset($_FILES['upload'])) {
     $fileError = $_FILES['upload']['error'];
 
     // Array of file types allowed.
-    $restrictedFileTypes = array('image/png', 'image/jpg', 'image/jpeg', 'video/mp4');
+    $restrictedFileTypes = array('image/png', 'image/jpg', 'image/jpeg', 'image/gif', 'video/mp4');
 
     // Initialize boolean.
     $isFileType = false;
@@ -90,12 +90,15 @@ if (isset($_FILES['upload'])) {
             echo "Successfully uploaded - " . "<a href='$fileUpload' target='__blank'>" . $fileName . "</a><br>";
         }
 
-        echo "You will be redirected in 3...";
-
-        // This will redirect instantly.
-        header("refresh:3;  url=index.php");
 
     } else {
         echo "Upload failed - " . $fileError;
     }
+} else {
+    echo "No file detected. ";
 }
+
+echo "You will be redirected in 3...";
+
+// This will redirect instantly.
+header("refresh:3;  url=index.php");

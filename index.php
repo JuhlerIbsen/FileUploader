@@ -10,11 +10,12 @@
     <label for="title">Media Title</label>
     <input type="text" name="title" id="title"/>
 
-    <label for="upload">Upload file</label>
+    <label for="upload">Upload image or video</label>
     <input type="file" name="upload" onchange="getInfo();" id="upload"/>
 
     <input type="submit" name="btnSubmit" value="Upload file"/>
 </form>
+<pre>Only these formats are allowed: (*.jpg, *.jpeg, *.png, *.mp4 and *.gif)</pre>
 <p id='name'></p>
 <p id='size'></p>
 <p id='type'></p>
