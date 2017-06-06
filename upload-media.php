@@ -74,6 +74,9 @@ if (isset($_FILES['upload'])) {
         // Prepare a prepared statement.
         if (mysqli_stmt_prepare($stmt, $query)) {
 
+            // Prevent html injection.
+            $webTitle = htmlspecialchars($webTitle);
+
             // Bind variables to the question marks.
             mysqli_stmt_bind_param($stmt, "sss", $webTitle, $fileUpload, $_SERVER['REMOTE_ADDR']);
 
