@@ -1,18 +1,22 @@
 <?php include('config/config.php');
 // Check if there are any file in the upload input.
 if (isset($_FILES['upload'])) {
-// Temporary file.
+    // Temporary file.
     $tmpName = $_FILES['upload']['tmp_name'];
 
-// Original name of file.
+    // Original name of file.
     $fileName = $_FILES['upload']['name'];
 
-// File type *.mp3, *.jpg etc...
+    // File type *.mp3, *.jpg etc...
     $fileType = $_FILES['upload']['type'];
 
-    // Array of file types not allowed.
+    // Holds error if any.
+    $fileError = $_FILES['upload']['error'];
+
+    // Array of file types allowed.
     $restrictedFileTypes = array('image/png', 'image/jpg', 'image/jpeg', 'video/mp4');
 
+    // Initialize boolean.
     $isFileType = false;
 
     // Loop through the array.
@@ -30,10 +34,10 @@ if (isset($_FILES['upload'])) {
     }
 
 
-// Destination to upload.
+    // Destination to upload.
     $fileUpload = "uploads/" . $fileName;
 
-// Check for post.
+    // Check for post.
     if (!empty($_POST['title'])) {
         // Title to be shown on website.
         $webTitle = $_POST['title'];
@@ -42,11 +46,12 @@ if (isset($_FILES['upload'])) {
     }
 
 
-// Counter used if file exists.
+    // Counter used if file exists.
     $countUp = 0;
 
+    // Loop to prevent overwriting.
     while (file_exists($fileUpload)) {
-        // Count one up for everytime the file already exists.
+        // Count one up for every time the file already exists.
         $countUp++;
 
         // Name the file.
@@ -69,7 +74,7 @@ if (isset($_FILES['upload'])) {
         // Prepare a prepared statement.
         if (mysqli_stmt_prepare($stmt, $query)) {
 
-            // Bind values to the question marks.
+            // Bind variables to the question marks.
             mysqli_stmt_bind_param($stmt, "sss", $webTitle, $fileUpload, $_SERVER['REMOTE_ADDR']);
 
             // Execute the statement.
@@ -79,7 +84,7 @@ if (isset($_FILES['upload'])) {
             mysqli_close($conn);
 
             // Give message, and a link to the image/video.
-            echo "Succesfully uploaded - " . "<a href='$fileUpload' target='__blank'>" . $fileName . "</a><br>";
+            echo "Successfully uploaded - " . "<a href='$fileUpload' target='__blank'>" . $fileName . "</a><br>";
         }
 
         echo "You will be redirected in 3...";
@@ -88,11 +93,6 @@ if (isset($_FILES['upload'])) {
         header("refresh:3;  url=index.php");
 
     } else {
-        echo "Upload failed.";
+        echo "Upload failed - " . $fileError;
     }
 }
-
-
-
-
-

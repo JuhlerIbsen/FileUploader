@@ -22,3 +22,8 @@ tr:nth-child(even) {
 .linkInTable:hover {
     color: black;
 }
+
+input {
+    display: block;
+    margin-bottom: 2%;
+}
