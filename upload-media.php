@@ -82,7 +82,10 @@ if (isset($_FILES['upload'])) {
             echo "Succesfully uploaded - " . "<a href='$fileUpload' target='__blank'>" . $fileName . "</a><br>";
         }
 
-        header("location: index.php");
+        echo "You will be redirected in 3...";
+
+        // This will redirect instantly.
+        header("refresh:3;  url=index.php");
 
     } else {
         echo "Upload failed.";
