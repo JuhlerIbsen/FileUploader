@@ -1,40 +1,8 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <script>
-        /**
-         * Set information about the file in the paragraphs.
-         */
-        function getInfo() {
-            var upload = document.getElementById("upload").files[0];
-            var nameText = document.getElementById("name");
-            var sizeText = document.getElementById("size");
-            var typeText = document.getElementById("type");
-
-            nameText.innerHTML = upload.name;
-            sizeText.innerHTML = upload.size + " bytes";
-            typeText.innerHTML = upload.type;
-        }
-    </script>
-
-    <!--- Style for table -->
-    <style>
-        table {
-            font-family: arial, sans-serif;
-            border-collapse: collapse;
-            width: 100%;
-        }
-
-        td, th {
-            border: 1px solid #dddddd;
-            text-align: left;
-            padding: 8px;
-        }
-
-        tr:nth-child(even) {
-            background-color: #dddddd;
-        }
-    </style>
+    <script src="scripts/index-js.js"></script>
+    <link rel="stylesheet" href="stylesheet/index.css"/>
 </head>
 
 <body>
@@ -86,7 +54,7 @@
         // List links.
         echo "<tr>
                 <td>$title</td>
-                <td><a href='$destination'>Go to file</a></td>
+                <td><a href='$destination' class='linkInTable'>Go to file</a></td>
                 <td>$ip</td>
                 <td>$timestamp</td>
                 </tr>";
