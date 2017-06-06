@@ -10,6 +10,9 @@ if (!empty($_FILES['upload']['name'])) {
     // File type *.mp3, *.jpg etc...
     $fileType = $_FILES['upload']['type'];
 
+    // File size in bytes
+    $fileSize = $_FILES['upload']['size'];
+
     // Holds error if any.
     $fileError = $_FILES['upload']['error'];
 
@@ -62,7 +65,7 @@ if (!empty($_FILES['upload']['name'])) {
     if (move_uploaded_file($tmpName, $fileUpload)) {
 
         // Query for the prepared statement, inserts information about media.
-        $query = 'INSERT INTO media (title, file_dir, ipaddress) VALUES (?, ?, ?);';
+        $query = 'INSERT INTO media (title, file_dir, ipaddress, fileSize) VALUES (?, ?, ?, ?);';
 
         // Connect to mysql.
         $conn = connect();
@@ -78,7 +81,7 @@ if (!empty($_FILES['upload']['name'])) {
             $webTitle = htmlspecialchars($webTitle);
 
             // Bind variables to the question marks.
-            mysqli_stmt_bind_param($stmt, "sss", $webTitle, $fileUpload, $_SERVER['REMOTE_ADDR']);
+            mysqli_stmt_bind_param($stmt, "ssss", $webTitle, $fileUpload, $_SERVER['REMOTE_ADDR'], $fileSize);
 
             // Execute the statement.
             mysqli_stmt_execute($stmt);

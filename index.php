@@ -24,7 +24,7 @@
     <tr>
         <th>Media title</th>
         <th>Link</th>
-        <th>Author</th>
+        <th>File size in megabytes</th>
         <th>Uploaded</th>
     </tr>
 
@@ -46,16 +46,20 @@
     mysqli_stmt_execute($stmt);
 
     // Bind columns.
-    mysqli_stmt_bind_result($stmt, $id, $title, $destination, $ip, $timestamp);
+    mysqli_stmt_bind_result($stmt, $id, $title, $destination, $ip, $timestamp, $fileSize);
 
     // Fetch data from bind_result.
     while (mysqli_stmt_fetch($stmt)) {
+
+        // Convert bytes to megabytes.
+        $fileSize = ($fileSize / 1024) / 1024;
+        $fileSize = number_format($fileSize, 2, '.', '');
 
         // List links.
         echo "<tr>
                 <td>$title</td>
                 <td><a href='$destination' target='_blanks' class='linkInTable'>Go to file</a></td>
-                <td>$ip</td>
+                <td>$fileSize</td>
                 <td>$timestamp</td>
                 </tr>";
     }
