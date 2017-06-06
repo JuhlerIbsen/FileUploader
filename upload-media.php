@@ -10,16 +10,37 @@ if (isset($_FILES['upload'])) {
 // File type *.mp3, *.jpg etc...
     $fileType = $_FILES['upload']['type'];
 
+    // Array of file types not allowed.
+    $restrictedFileTypes = array('image/png', 'image/jpg', 'image/jpeg', 'video/mp4');
+
+    $isFileType = false;
+
+    // Loop through the array.
+    foreach ($restrictedFileTypes as $restrict) {
+        // Check if file type is allowed.
+        if ($fileType === $restrict) {
+            // Will only return true if it is allowed.
+            $isFileType = true;
+        }
+    }
+
+    // File still false? Kill this script.
+    if (!$isFileType) {
+        die("File Type not allowed.");
+    }
+
+
 // Destination to upload.
     $fileUpload = "uploads/" . $fileName;
 
 // Check for post.
-    if (isset($_POST['title'])) {
+    if (!empty($_POST['title'])) {
         // Title to be shown on website.
         $webTitle = $_POST['title'];
     } else {
         $webTitle = "No title";
     }
+
 
 // Counter used if file exists.
     $countUp = 0;
@@ -46,20 +67,22 @@ if (isset($_FILES['upload'])) {
 
 
         // Prepare a prepared statement.
-        mysqli_stmt_prepare($stmt, $query);
+        if (mysqli_stmt_prepare($stmt, $query)) {
 
-        // Bind values to the question marks.
-        mysqli_stmt_bind_param($stmt, "sss", $webTitle, $fileUpload, $_SERVER['REMOTE_ADDR']);
+            // Bind values to the question marks.
+            mysqli_stmt_bind_param($stmt, "sss", $webTitle, $fileUpload, $_SERVER['REMOTE_ADDR']);
 
-        // Execute the statement.
-        mysqli_stmt_execute($stmt);
+            // Execute the statement.
+            mysqli_stmt_execute($stmt);
 
-        // Close connection.
-        mysqli_close($conn);
+            // Close connection.
+            mysqli_close($conn);
 
-        // Give message, and a link to the image/video.
-        echo "Succesfully uploaded - " . "<a href='$fileUpload' target='__blank'>" . $fileName . "</a><br>";
+            // Give message, and a link to the image/video.
+            echo "Succesfully uploaded - " . "<a href='$fileUpload' target='__blank'>" . $fileName . "</a><br>";
+        }
 
+        header("location: index.php");
 
     } else {
         echo "Upload failed.";
