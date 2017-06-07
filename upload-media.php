@@ -1,4 +1,5 @@
 <?php include('config/config.php');
+
 // Check if there are any file in the upload input.
 if (!empty($_FILES['upload']['name'])) {
     // Temporary file.
@@ -17,7 +18,7 @@ if (!empty($_FILES['upload']['name'])) {
     $fileError = $_FILES['upload']['error'];
 
     // Array of file types allowed.
-    $restrictedFileTypes = array('image/png', 'image/jpg', 'image/jpeg', 'image/gif', 'video/mp4');
+    $restrictedFileTypes = array('image/png', 'image/jpg', 'image/jpeg', 'image/gif');
 
     // Initialize boolean.
     $isFileType = false;
@@ -31,7 +32,7 @@ if (!empty($_FILES['upload']['name'])) {
         }
     }
 
-    // File still false? Kill this script.
+    // File not allowed? Kill this script.
     if (!$isFileType) {
         die("File Type not allowed.");
     }
@@ -61,7 +62,6 @@ if (!empty($_FILES['upload']['name'])) {
         $fileUpload = "uploads/" . $countUp . "_" . $fileName;
     }
 
-
     if (move_uploaded_file($tmpName, $fileUpload)) {
 
         // Query for the prepared statement, inserts information about media.
@@ -89,19 +89,20 @@ if (!empty($_FILES['upload']['name'])) {
             // Close connection.
             mysqli_close($conn);
 
-            // Give message, and a link to the image/video.
-            echo "Successfully uploaded - " . "<a href='$fileUpload' target='__blank'>" . $fileName . "</a><br>";
-        }
+            // Redirect instantly, to prevent multi form submissions.
+            header("Location: index.php");
 
+        }
 
     } else {
         echo "Upload failed - " . $fileError;
     }
+
 } else {
-    echo "No file detected. ";
+    echo "No file detected.";
 }
 
-echo "You will be redirected in 3...";
+echo "<br>You will be redirected in 3 seconds.";
 
-// This will redirect instantly.
-header("refresh:3;  url=index.php");
+// Redirect in 3 seconds.
+header("refresh: 3; url=index.php");
