@@ -14,13 +14,25 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"
             integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
             crossorigin="anonymous"></script>
+
+    <link rel="stylesheet" href="stylesheet/showimage.css"/>
 </head>
 
 <body>
 <?php
 
+if (isset($_GET['mediaId'])) {
+    $mediaId = $_GET['mediaId'];
+} else {
+    $mediaId = 0;
+}
+
 // sql used in this session.
-$query = 'SELECT title, file_dir, ipaddress FROM media WHERE mediaId = ?';
+if ($mediaId > 0) {
+    $query = 'SELECT title, file_dir, ipaddress FROM media WHERE mediaId = ?';
+} else {
+    $query = "SELECT title, file_dir, ipaddress FROM media;";
+}
 
 // Connect to database.
 $conn = connect();
@@ -31,8 +43,11 @@ $stmt = mysqli_stmt_init($conn);
 // Prepare statement with the query provided.
 mysqli_stmt_prepare($stmt, $query);
 
+// Don't run this when there's no mediaid.
+if ($mediaId > 0) {
 // Bind the user input.
-mysqli_stmt_bind_param($stmt, "i", $_GET['mediaId']);
+    mysqli_stmt_bind_param($stmt, "i", $_GET['mediaId']);
+}
 
 // Execute query.
 mysqli_stmt_execute($stmt);
@@ -43,14 +58,18 @@ mysqli_stmt_bind_result($stmt, $title, $fileDir, $ip);
 // Go through the fields.
 while (mysqli_stmt_fetch($stmt)) {
     ?>
-    <center>
-        <div class="imgBox" style="border: solid 2px black; width: 25%; height: 25%;">
-            <h1><?php echo $title; ?></h1>
-            <img src="<?php echo $fileDir; ?>" style="width: 40%; height: 40%;"/>
-            <p>Posters IP: <?php echo $ip; ?></p>
-        </div>
-    </center>
+
+    <div class="imgBox" align="center">
+
+        <h1><?php echo $title; ?></h1>
+        <img src="<?php echo $fileDir; ?>""/>
+        <p>Posters IP: <?php echo $ip; ?></p>
+        <p><a href='<?php echo $fileDir; ?>' target='_blank'>Link to original image</a></p>
+
+    </div>
+
     <?php
+
 }
 ?>
 </body>

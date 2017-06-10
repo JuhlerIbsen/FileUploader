@@ -1,0 +1,19 @@
+body {
+    background-image: url("/../images/background.png");
+}
+
+.imgBox {
+    display: inline-block;
+    background-image: url("/../images/giftly.png");
+    border-radius: 25px;
+    align-items: center;
+    border: solid 2px #8b96a4;
+    margin: 25px;
+    width: 450px;
+    height: 350px;
+}
+
+img {
+    width: 175px;
+    height: 175px;
+}
